@@ -5,10 +5,9 @@ const lodash = require('lodash');
 const baseURL = 'https://rickandmortyapi.com/api/';
 const characters = 'character/';
 
-let rickAndMortyArray = [];
-let results = [];
-
-async function getDataFromRick(id, name, status, species, type, gender, location) {
+async function getDataFromRick(...args) {
+    let rickAndMortyArray = [];
+    let results = [];
     const initialResponse = await axios.get(`${baseURL}${characters}`);
     let pages = initialResponse.data.info.pages;
     for (let i = 1; i <= pages; i++) {
@@ -21,16 +20,17 @@ async function getDataFromRick(id, name, status, species, type, gender, location
         }
 
         const filteredList = results.filter(x =>
-            x.name === name
-            && x.id === id
-            && x.status === status
-            && x.species === species
-            && x.type === type
-            && x.gender === gender
-            && x.location.name === location);
+            x.name === args[1]
+            || x.id === args[0]
+            || x.status === args[2]
+            || x.species === args[3]
+            || x.type === args[4]
+            || x.gender === args[5]
+            || x.location.name === args[6]
+        );
         console.log(filteredList);
 
-        fs.writeFileSync('rick.json', JSON.stringify(results, null, '\t'), 'utf-8');
+        return fs.writeFileSync('rick.json', JSON.stringify(results, null, '\t'), 'utf-8');
     });
 }
 
